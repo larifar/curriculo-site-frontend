@@ -1,9 +1,12 @@
 import { Routes } from '@angular/router';
-import { SimpleLoginComponent } from './components/simple-login.component';
-import { HomeComponent } from './components/home.component';
+import { HomeComponent } from './components/home/home.component';
+import { SigninComponent } from './components/signin/signin.component';
+import { SigupComponent } from './components/sigup/sigup.component';
 
 export const routes: Routes = [
-  { path: '', component: SimpleLoginComponent },
-  { path: 'home', component: HomeComponent },
-  // ...outras rotas...
+  { path: '', component: SigninComponent },
+  { path: 'home', component: HomeComponent, canActivate: [() => import('./guards/auth.guard').then(m => m.authGuard)] },
+  { path: 'login', component: SigninComponent },
+  { path: 'signup', component: SigupComponent },
+
 ];

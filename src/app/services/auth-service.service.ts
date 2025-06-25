@@ -20,9 +20,17 @@ export class AuthServiceService {
   }
 
   async signUp(email: string, password: string): Promise<void> {
-    const { error } = await this.getSupabase().auth.signUp({ email, password });
-    if (error) throw error;
+  const { data, error } = await this.getSupabase().auth.signUp({
+    email,
+    password,
+  });
+
+  if (error) throw error;
+
+  if (data.user && data.user.identities?.length === 0) {
+    throw new Error('E-mail já cadastrado');
   }
+}
 
   async signIn(email: string, password: string): Promise<void> {
     const { error } = await this.getSupabase().auth.signInWithPassword({ email, password });

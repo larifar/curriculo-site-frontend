@@ -24,6 +24,9 @@ msg = '';
       this.router.navigate(['/home']);
     } catch (error) {
       this.msg = 'Login inválido!';
+      if (error instanceof Error) {
+        this.msg += ' ' + error.message;
+      }
     }
   }
 }

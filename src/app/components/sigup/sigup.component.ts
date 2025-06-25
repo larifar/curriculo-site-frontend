@@ -21,12 +21,11 @@ msg = '';
     this.msg = '';
     try {
       await this.authService.signUp(this.email, this.password);
-      this.router.navigate(['/login']);
-    } catch (error) {
-      this.msg = 'Erro ao criar cadastro! ';
-      if (error instanceof Error) {
-        this.msg += error.message;
-      }
+      this.msg = 'Cadastro realizado com sucesso!';
+      setTimeout(() => this.router.navigate(['/login']), 1000);
+    } catch (error: any) {
+      console.error('Erro Supabase:', error);
+      this.msg = 'Erro ao criar cadastro! ' + (error?.message || '');
     }
   }
 }
