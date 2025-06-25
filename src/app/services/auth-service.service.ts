@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 
@@ -7,30 +7,36 @@ import { environment } from '../../environments/environment';
 })
 export class AuthServiceService {
 
-  private supabase : SupabaseClient
+  private supabase! : SupabaseClient
 
   constructor() {
-    this.supabase = createClient(environment.supabaseUrl, environment.supabaseAnonKey)
+  }
+
+  private getSupabase(): SupabaseClient {
+    if (!this.supabase) {
+      this.supabase = createClient(environment.supabaseUrl, environment.supabaseAnonKey);
+    }
+    return this.supabase;
   }
 
   async signUp(email: string, password: string): Promise<void> {
-    const { error } = await this.supabase.auth.signUp({ email, password });
+    const { error } = await this.getSupabase().auth.signUp({ email, password });
     if (error) throw error;
   }
 
   async signIn(email: string, password: string): Promise<void> {
-    const { error } = await this.supabase.auth.signInWithPassword({ email, password });
+    const { error } = await this.getSupabase().auth.signInWithPassword({ email, password });
     if (error) throw error;
   }
 
   async getCurrentSession() {
-    const { data, error } = await this.supabase.auth.getSession();
+    const { data, error } = await this.getSupabase().auth.getSession();
     if (error) throw error;
     return data.session;
   }
 
   async signOut(): Promise<void> {
-    const { error } = await this.supabase.auth.signOut();
+    const { error } = await this.getSupabase().auth.signOut();
     if (error) throw error;
   }
 }

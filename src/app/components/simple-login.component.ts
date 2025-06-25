@@ -1,0 +1,39 @@
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { AuthServiceService } from '../services/auth-service.service';
+
+@Component({
+  selector: 'app-simple-login',
+  standalone: true,
+  imports: [FormsModule, CommonModule],
+  template: `
+    <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4 max-w-sm mx-auto mt-16 p-8 bg-white rounded shadow">
+      <input [(ngModel)]="email" name="email" placeholder="Email" required class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <input [(ngModel)]="password" name="password" type="password" placeholder="Senha" required class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition-colors">Entrar</button>
+    </form>
+    <div *ngIf="msg" class="text-green-600 text-center mt-4">{{ msg }}</div>
+  `,
+  styles: [`
+    /* Estilos adicionais podem ser adicionados aqui, se necessário */
+  `]
+})
+export class SimpleLoginComponent {
+  email = '';
+  password = '';
+  msg = '';
+
+  constructor(private router: Router, private authService: AuthServiceService) {}
+
+  async onSubmit() {
+    this.msg = '';
+    try {
+      await this.authService.signIn(this.email, this.password);
+      this.router.navigate(['/home']);
+    } catch (error) {
+      this.msg = 'Login inválido!';
+    }
+  }
+}
