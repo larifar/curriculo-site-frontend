@@ -37,10 +37,10 @@ export class AuthServiceService {
     if (error) throw error;
   }
 
-  async getCurrentSession() {
+  async getCurrentSession(): Promise<string | null> {
     const { data, error } = await this.getSupabase().auth.getSession();
     if (error) throw error;
-    return data.session;
+    return data.session?.access_token ?? null;
   }
 
   async signOut(): Promise<void> {
