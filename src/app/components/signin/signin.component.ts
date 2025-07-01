@@ -21,7 +21,9 @@ msg = '';
     this.msg = '';
     try {
       await this.authService.signIn(this.email, this.password);
-      this.router.navigate(['/home']);
+      await this.authService.getCurrentSession();
+      this.msg = 'Login realizado com sucesso!';
+      setTimeout(() => this.router.navigate(['/home']), 400);
     } catch (error) {
       this.msg = 'Login inválido!';
       if (error instanceof Error) {
